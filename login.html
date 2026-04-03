@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Secury</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="./js/supabase.js"></script>
+    <script src="./js/crypto.js"></script>
+    <script src="./js/auth.js"></script>
+</head>
+<body class="auth-layout">
+    <div class="auth-card">
+        <h2>Willkommen zurück</h2>
+        <div id="error-msg" style="color:var(--danger); font-size:0.9rem; margin-bottom:1rem; text-align:center; display:none;"></div>
+        
+        <form id="login-form">
+            <div class="form-group">
+                <label for="email">E-Mail Adresse</label>
+                <input type="email" id="email" required placeholder="name@firma.de">
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Passwort</label>
+                <input type="password" id="password" required placeholder="Dein Master-Passwort">
+            </div>
+            
+            <button type="submit" class="btn btn-primary btn-block" id="submit-btn" style="margin-top: 1rem;">Sicher einloggen</button>
+        </form>
+        
+        <p style="text-align:center; margin-top:2rem; font-size:0.9rem; color:var(--text-muted);">
+            Noch keinen Account? <a href="register.html" style="color:var(--primary); font-weight:500; text-decoration:none;">Registrieren</a>
+        </p>
+    </div>
+
+    <script>
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('submit-btn');
+            const errorMsg = document.getElementById('error-msg');
+            btn.disabled = true;
+            btn.textContent = "Authentifizierung...";
+            errorMsg.style.display = 'none';
+            
+            try {
+                await window.Auth.login(document.getElementById('email').value, document.getElementById('password').value);
+                // Leite direkt zum SPA Dashboard weiter
+                window.location.href = 'app.html';
+            } catch (error) {
+                errorMsg.textContent = error.message || "Login fehlgeschlagen. Bitte prüfe deine Daten.";
+                errorMsg.style.display = 'block';
+                btn.disabled = false;
+                btn.textContent = "Sicher einloggen";
+            }
+        });
+    </script>
+</body>
+</html>

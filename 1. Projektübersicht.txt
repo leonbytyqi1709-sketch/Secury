@@ -1,0 +1,223 @@
+1. Projektübersicht
+Secury ist ein moderner, browserbasierter Passwort Manager mit integriertem Passwort Generator. Das Projekt wird als OpenSource Web-Anwendung entwickelt und dient gleichzeitig als persönliches Produktivitätstool und Portfolio-Projekt.
+
+Der Kerngedanke von Secury ist Sicherheit durch Zero-Knowledge Verschlüsselung: Passwörter werden ausschliesslich client-seitig mit AES-256 verschlüsselt, bevor sie in der Datenbank gespeichert werden. Der Server sieht zu keinem Zeitpunkt unverschlüsselte Passwörter.
+
+1.1 Projektziele
+    • Eigener, sicherer Passwort Manager für den täglichen Gebrauch
+    • Portfolio-Projekt das Sicherheitskompetenz demonstriert
+    • OpenSource Veröffentlichung auf GitHub
+    • Grundlage für eine spätere iOS-App
+    • Erfahrung mit Zero-Knowledge Kryptographie und Supabase
+
+1.2 Zielgruppe
+    • Primär: Leon selbst (persönliches Tool)
+    • Sekundär: IT-affine Nutzer die eine einfache OpenSource-Lösung suchen
+    • Langfristig: Allgemeine Nutzer nach iOS-Release
+
+
+2. Technologie-Stack
+2.1 Frontend
+Technologie
+Begründung
+HTML5 / CSS3
+Basis-Struktur und Styling ohne Framework-Overhead
+Vanilla JavaScript
+Bekannter Stack, kein Build-Setup, volle Kontrolle
+Web Crypto API
+Native Browser-API für AES-256 Verschlüsselung
+Supabase JS Client
+Offizielles SDK für Auth und Datenbank
+
+2.2 Backend & Infrastruktur
+Service
+Verwendung
+Supabase Auth
+Benutzerregistrierung, Login, Logout, Session-Management
+Supabase Database
+Speicherung verschlüsselter Passwort-Einträge (PostgreSQL)
+Supabase Free Tier
+Kostenlos, ausreichend für persönlichen Gebrauch
+Vercel / GitHub Pages
+Hosting der Web-Anwendung (kostenlos)
+GitHub
+Versionskontrolle und OpenSource Veröffentlichung
+
+
+3. Sicherheitsarchitektur (Zero-Knowledge)
+Das Herzstück von Secury ist das Zero-Knowledge Prinzip. Kein Server, keine Datenbank und kein Dritter hat jemals Zugriff auf unverschlüsselte Passwörter. Die gesamte Kryptographie findet ausschliesslich im Browser des Nutzers statt.
+
+3.1 Verschlüsselungsablauf
+Beim Speichern eines Passworts:
+    • Nutzer gibt Passwort-Eintrag ein
+    • Browser generiert aus dem Master-Passwort einen AES-256 Schlüssel (PBKDF2)
+    • Eintrag wird client-seitig mit AES-256-GCM verschlüsselt
+    • Nur der verschlüsselte Blob wird an Supabase gesendet
+    • Supabase speichert ausschliesslich verschlüsselte Daten
+
+Beim Abrufen eines Passworts:
+    • Nutzer ist eingeloggt und gibt Master-Passwort ein
+    • Browser lädt verschlüsselten Blob von Supabase
+    • AES-256 Schlüssel wird erneut aus Master-Passwort abgeleitet
+    • Entschlüsselung findet lokal im Browser statt
+    • Klartextpasswort wird nur im Arbeitsspeicher gehalten, nie gespeichert
+
+3.2 Wichtige Sicherheitshinweise
+    • Das Master-Passwort wird NIEMALS gespeichert oder übertragen
+    • Geht das Master-Passwort verloren, sind alle Einträge unwiederbringlich verloren
+    • Empfehlung: Master-Passwort sicher offline aufbewahren
+    • Supabase Row Level Security (RLS) verhindert Zugriff anderer Nutzer
+
+
+4. Features — Version 1.0
+4.1 Authentifizierung
+    • Registrierung mit E-Mail und Passwort (Supabase Auth)
+    • Login / Logout
+    • Session-Management (automatisch eingeloggt bleiben)
+    • Benutzerseite / Profil (Account-Infos, Master-Passwort ändern)
+
+4.2 Passwort-Verwaltung
+    • Passwort-Eintrag erstellen (Name, Benutzername, Passwort, URL, Kategorie, Notizen)
+    • Einträge anzeigen in einer übersichtlichen Liste
+    • Eintrag bearbeiten
+    • Eintrag löschen (mit Bestätigung)
+    • Passwort anzeigen / verstecken Toggle
+    • Passwort mit einem Klick in die Zwischenablage kopieren
+
+4.3 Passwort Generator
+    • Passwortlänge einstellbar (8 bis 64 Zeichen)
+    • Optionen: Grossbuchstaben, Kleinbuchstaben, Zahlen, Sonderzeichen
+    • Passwort direkt in neuen Eintrag übernehmen
+    • Stärke-Anzeige (Weak / Fair / Strong / Very Strong)
+
+4.4 Organisation & Suche
+    • Kategorien: Social Media, Banking, E-Mail, Gaming, Shopping, Arbeit, Sonstiges
+    • Suchfunktion (Echtzeit-Filterung nach Name / URL)
+    • Filterung nach Kategorie
+
+4.5 Geplant für spätere Versionen
+    • Browser Extension für automatisches Ausfüllen
+    • Import / Export (CSV, JSON)
+    • Zwei-Faktor-Authentifizierung (2FA)
+    • iOS-App (React Native oder Swift)
+    • Passwort-Sharing (verschlüsselt)
+    • Sicherheits-Audit (doppelte Passwörter, schwache Passwörter erkennen)
+
+
+5. Design-System
+Secury verwendet ein helles, modernes Design mit dunklen Cyan-Blau Akzenten und Neon Glow-Effekten. Das Design soll Vertrauen, Sicherheit und Professionalität ausstrahlen.
+
+5.1 Farbpalette
+Name
+Hex-Code
+Verwendung
+Hintergrund
+#FFFFFF
+Seitenhintergrund, Karten
+Off-White
+#F5F8FA
+Sekundärer Hintergrund, Inputs
+Primär (Dunkel)
+#0D3B5E
+Navbar, Überschriften, Buttons
+Sekundär
+#1A5276
+Sekundäre Elemente, Hover
+Neon Akzent
+#00E5CC
+Glow-Effekte, Highlights, Icons
+Text (Dunkel)
+#1C2833
+Haupttext
+Text (Grau)
+#717D7E
+Sekundärtext, Platzhalter
+Fehler / Rot
+#E74C3C
+Fehlermeldungen, Löschen
+Erfolg / Grün
+#1ABC9C
+Erfolgsmeldungen
+
+5.2 Typographie
+    • Schriftart: Inter oder System-Font-Stack (sans-serif)
+    • Überschrift H1: 2rem, Bold, Farbe #0D3B5E
+    • Überschrift H2: 1.5rem, SemiBold, Farbe #1A5276
+    • Body Text: 1rem, Regular, Farbe #1C2833
+    • Label / Caption: 0.875rem, Regular, Farbe #717D7E
+
+5.3 Glow-Effekte (CSS)
+Der charakteristische Neon-Glow-Effekt von Secury wird per CSS box-shadow umgesetzt:
+
+box-shadow: 0 0 10px #00E5CC, 0 0 20px #00E5CC40, 0 0 40px #00E5CC20;
+
+
+6. Seitenstruktur
+6.1 Öffentliche Seiten (ohne Login)
+    • / — Landing Page (Projektvorstellung, Login/Registrierung CTA)
+    • /login — Login-Seite
+    • /register — Registrierungs-Seite
+
+6.2 Geschützte Seiten (mit Login)
+    • /dashboard — Hauptseite mit allen Passwort-Einträgen
+    • /new — Neuen Eintrag erstellen
+    • /edit/:id — Eintrag bearbeiten
+    • /generator — Passwort Generator (standalone)
+    • /profile — Benutzerseite / Account-Einstellungen
+
+6.3 Datenbankstruktur (Supabase)
+Tabelle: password_entries
+Spalte
+Typ
+Beschreibung
+id
+UUID
+Primärschlüssel, auto-generiert
+user_id
+UUID
+Fremdschlüssel auf auth.users
+title
+TEXT
+Name des Eintrags (z.B. 'Google')
+username
+TEXT (encrypted)
+Benutzername, AES-256 verschlüsselt
+password
+TEXT (encrypted)
+Passwort, AES-256 verschlüsselt
+url
+TEXT
+Website-URL (optional, unverschlüsselt)
+category
+TEXT
+Kategorie (Social, Banking, etc.)
+notes
+TEXT (encrypted)
+Notizen, verschlüsselt (optional)
+iv
+TEXT
+Initialisierungsvektor für AES-GCM
+created_at
+TIMESTAMP
+Erstellungsdatum
+updated_at
+TIMESTAMP
+Letztes Änderungsdatum
+
+
+7. Session-Zusammenfassung
+Diese Sektion dient als Gedächtnisstütze für die Weiterarbeit in einem neuen Chat. Einfach diese Zusammenfassung kopieren und in den neuen Chat einfügen.
+
+SECURY — PROJEKT-ZUSAMMENFASSUNG FUR NEUEN CHAT
+Projekt: Secury — Passwort Manager & Generator (Web-App)
+Stack: Vanilla JS + HTML/CSS | Supabase Auth + DB | Web Crypto API (AES-256) | Vercel/GitHub Pages
+Design: Weiss + Dunkles Cyan-Blau (#0D3B5E) + Neon Glow (#00E5CC)
+Sicherheit: Zero-Knowledge (client-seitige Verschlüsselung, Server sieht keine Klartext-Passwörter)
+Features V1: Auth/Profil | Einträge CRUD | Passwort Generator | Kategorien | Suche | Copy/Toggle
+Status: Planung abgeschlossen, bereit für Entwicklungsstart
+OpenSource: Ja (GitHub) | iOS-App: Geplant für spätere Version
+
+
+
+Secury — Projektdokumentation V1.0
+Entwickelt von Leon | 2.4.2026

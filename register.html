@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrieren - Secury</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="./js/supabase.js"></script>
+    <script src="./js/crypto.js"></script>
+    <script src="./js/auth.js"></script>
+</head>
+<body class="auth-layout">
+    <div class="auth-card">
+        <h2>Neuen Account erstellen</h2>
+        
+        <div id="error-msg" style="color:var(--danger); font-size:0.9rem; margin-bottom:1rem; text-align:center; display:none;"></div>
+        <div id="success-msg" style="color:var(--success); font-size:0.9rem; margin-bottom:1rem; text-align:center; display:none;"></div>
+        
+        <form id="register-form">
+            <div class="form-group">
+                <label for="email">E-Mail Adresse</label>
+                <input type="email" id="email" required placeholder="name@firma.de">
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Passwort setzen</label>
+                <input type="password" id="password" required placeholder="Mindestens 8 Zeichen">
+                <small style="color: var(--text-muted); display:block; margin-top:0.4rem; font-size:0.8rem; line-height: 1.3;">Wird gleichzeitig als Master-Verschlüsselungs-Key für deinen Tresor genutzt.</small>
+            </div>
+            
+            <button type="submit" class="btn btn-primary btn-block" id="submit-btn" style="margin-top: 1rem;">Konto eröffnen</button>
+        </form>
+        
+        <p style="text-align:center; margin-top:2rem; font-size:0.9rem; color:var(--text-muted);">
+            Bereits einen Account? <a href="login.html" style="color:var(--primary); font-weight:500; text-decoration:none;">Hier einloggen</a>
+        </p>
+    </div>
+
+    <script>
+        document.getElementById('register-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('submit-btn');
+            const errorMsg = document.getElementById('error-msg');
+            const successMsg = document.getElementById('success-msg');
+            
+            errorMsg.style.display = 'none';
+            successMsg.style.display = 'none';
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            if (password.length < 8) {
+                errorMsg.textContent = "Das Passwort muss mindestens 8 Zeichen lang sein.";
+                errorMsg.style.display = 'block';
+                return;
+            }
+            
+            btn.disabled = true;
+            btn.textContent = "Wird erstellt...";
+            
+            try {
+                await window.Auth.register(email, password);
+                successMsg.textContent = "Account erstellt! Du kannst dich jetzt einloggen.";
+                successMsg.style.display = 'block';
+                document.getElementById('register-form').reset();
+            } catch (error) {
+                errorMsg.textContent = error.message || "Fehler bei der Registrierung";
+                errorMsg.style.display = 'block';
+            } finally {
+                btn.disabled = false;
+                btn.textContent = "Konto eröffnen";
+            }
+        });
+    </script>
+</body>
+</html>
