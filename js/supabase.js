@@ -4,8 +4,8 @@
  * ACHTUNG: Ersetze die Platzhalter mit deinen tatsächlichen Supabase Projekt-Daten!
  */
 
-const SUPABASE_URL = 'https://wkpglvvbyhwhvfoujjlu.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndrcGdsdnZieWh3aHZmb3Vqamx1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUxNDYyMTgsImV4cCI6MjA5MDcyMjIxOH0.LYb8kyfvqaBgW1PLuWqwnRAurg0Iz7V14QTmumc1I-c';
+const SUPABASE_URL = 'https://onbhxnjnzdnqttkeojsw.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9uYmh4bmpuemRucXR0a2VvanN3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkxODgxMzYsImV4cCI6MjA5NDc2NDEzNn0.K-dA9sr8_7JILmOBUg8uRoVTsH3XRMs4hIYo8y1Ts5c';
 
 // Init Supabase Client (benötigt supabase-js Bibliothek im HTML)
 let supabaseClient = null;
